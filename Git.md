@@ -8,9 +8,9 @@ Git is a type of software known as a _version control system_. As the name impli
 
 In principle, any type of file or collections of files can be managed by a VCS. The largest category of people that tend to use a VCS, however, are software developers. This is because software developers tend to work in groups on very large collections of files, and even small changes can have huge consequences on how the software works. Additionally, most VCS programs (including Git) have functionality for sharing files and their different versions, which is particularly useful for software developers.
 
-That said, there is nothing really special about code. Code is (usually) just text, and a VCS that can manage code well can probably manage any other kind of text well, too. So if you have heard of Git but are not a programmer, do not despair! Git can be useful for you too. If you tend to write essays, notes, or any other kind of text, Git might be helpful for you, too.
+That said, there is nothing really special about code. Code is (usually) just text, and a VCS that can manage code well can probably manage any other kind of text well, too. So if you have heard of Git but are not a programmer, don't despair! Git can be useful for you too. For example, if you tend to write essays, notes, or any other kind of text, Git might be the tool for you.
 
-Just one caveat: For various reasons, Git is **not** good at working with binary files. Binary files are any files that are not just plain text (e.g. you couldn't open them in TextEdit on OS X or Notepad on Windows). Microsoft Word files, for example, while "text files," also contain lots of formatting and other data that don't make them suitable for Git. (That said, there are many VCS-like features in those programs too; think about "Track Changes" in Microsoft Word.)
+Just one caveat: For various reasons, Git is **not** good at working with binary files. Binary files are any files that are not just plain text (e.g. you couldn't open them in TextEdit on OS X or Notepad on Windows). Microsoft Word files, for example, while "text files," also contain lots of formatting and other data that don't make them suitable for Git. You'll need to be working with plain text. That said, there are many VCS-like features in those programs too; think about "Track Changes" in Microsoft Word.
 
 
 ## About this document
@@ -19,9 +19,9 @@ Git is a unique piece of software. With breathtaking speed, it has found itself 
 
 And yet, despite being so widely used, there's a surprising dearth of good documentation about **how** to use it. Most existing documentation falls into one of two categories. Some pieces, like the [GitHub bootcamp](https://help.github.com/categories/bootcamp/) are essentially quick-and-dirty "tutorials": their goal is to teach users how to accomplish a particular task with Git by listing out a few commands and not really explaining what those commands are doing. This works for a little while, but the problem is that Git, while a very powerful tool, has a **horrible** UI. As a result, it's just a matter of time before users make a mistake and find themselves in a state the tutorial doesn't cover.
 
-The other type of documentation suffers from the opposite problem: it goes into **too much** detail. The best example of this is the ["Git Internals" chapter of the Git Book](http://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain). It explains in meticulous how Git works under the hood. By the end of it, you're either bored or fascinated, but you've certainly forgotten what task you were trying to accomplish in the first place.
+The other type of documentation suffers from the opposite problem: it goes into **too much** detail. The best example of this is the ["Git Internals" chapter of the Git Book](http://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain). It explains in meticulous detail how Git works under the hood. By the end of it, you're either bored or fascinated, but you've certainly forgotten what task you were trying to accomplish in the first place.
 
-Both of these approaches suffer from the same fundamental problem: they don't capitalize on the fact that Git is not just a powerful tool, but an elegant one. While its UI is indeed horrible, the principles behind the tool are remarkably clean and simple. They are concepts that are embodied by the UI (such as it is) and are generic enough to accomplish any task. At the same time, it is **not** necessary to understand the program's internals to learn how ot use Git (in fact, doing so can undermine the learning process). If you can get past the UI, you can learn to use Git well.
+Both of these approaches suffer from the same fundamental problem: they don't capitalize on the fact that Git is not just a powerful tool, but an elegant one. While its UI is indeed horrible, the principles behind the tool are remarkably clean and simple. They are concepts that are embodied by the UI (such as it is) and are generic enough to accomplish any task. At the same time, it is **not** necessary to understand the program's internals to learn how ot use Git (in fact, doing so can undermine the learning process). If you can get past the clunky UI to the underlying principles it is trying to expose, you can learn to use Git well.
 
 This document aims to teach how to use Git using those principles.
 
@@ -29,9 +29,11 @@ This document aims to teach how to use Git using those principles.
 
 You do **not** have to have tried using Git before to read this document. You also do not need to be a programmer, or even want to use Git for code. As explained in the first section, Git is fundamentally just a tool for manipulating text, and you can use it to keep track of any kind of plain text. (However, it's not good for binary data.)
 
-That said, this document does have some prerequisites. The most important one is that you need to be comfortable using the Unix command line. This doesn't mean you need to be a pro, or even an advanced user. It just means you should understand what "running commands" mean and can understand Unix-y shortcuts like "`~`" (e.g. "`~/.gitconfig`"), as well as the concept of "hidden files" (i.e. files that begin with a `.` that `ls` won't show you but `ls -a` will). While there are some [visual](https://mac.github.com/) [programs](https://www.sourcetreeapp.com/) that technically make it possible to use Git while avoidings the command line, I think it is worth learning the commands before switching to the GUI-only approach. The programs are getting quite good, but they nonetheless bring their own interpretations and concepts to the table that I believe will end up confusing—at least while you're learning.
+That said, this document does have some prerequisites. The most important one is that you need to be comfortable using the Unix command line. This doesn't mean you need to be a pro, or even an advanced user. It just means you should understand what "running commands" mean and can understand Unix-y shortcuts like "`~`" (e.g. "`~/.gitconfig`"), as well as the concept of "hidden files" (i.e. files that begin with a `.` that `ls` won't show you but `ls -a` will). While there are some [visual](https://mac.github.com/) [programs](https://www.sourcetreeapp.com/) that technically make it possible to use Git while avoidings the command line, I think it is worth learning the commands before switching to the GUI-only approach. The programs are getting quite good, but they nonetheless bring their own interpretations and concepts to the table that I believe will end up being confusing—at least while you're learning.
 
-Another prerequisite is that you should be comfortable using some plain-text editor that you can call from the command-line. It doesn't really matter what this editor is: it can be [nano](http://www.nano-editor.org) or [vim](http://www.vim.org/) or [emacs](http://www.gnu.org/software/emacs/). It can even be [TextEdit or Notepad](http://nicercode.github.io/git/setup.html) (scroll down to the "Editor" section).
+**Note for Windows users:** If you're on Windows, the Git installation will usually come with a small version of the Unix command line (often called "Git Bash" or similar). You can use it to run all of these same commands. Do **not** use Command Prompt.
+
+Another prerequisite is that you should be comfortable using some plain-text editor that you can call from the command-line. It doesn't really matter what this editor is: it can be [nano](http://www.nano-editor.org) or [vim](http://www.vim.org/) or [emacs](http://www.gnu.org/software/emacs/). It can even be [TextEdit or Notepad](http://nicercode.github.io/git/setup.html) (scroll down to the [note about setting your editor](#editor) in the "Getting started" section).
 
 Finally, a prerequisite for using this document is having [downloaded and installed Git](https://git-scm.com/downloads). If you can run "`git`" in a terminal and see a list of commands that Git understands, you're good.
 
@@ -74,7 +76,7 @@ The appendix at the end of this document lists the commands we've covered, what 
 
 As with many programs, one of the first things that you should do with Git after installing it is configuring it. There are a few things you should do:
 
-1. **Set the editor Git will use:** There are a few times that Git will want to open a text editor for you to do something. You should tell it which editor to use (if you don't, it will resort to the `$EDITOR` environment variable). If, for example, you want to use Nano, you should run something like this:
+1. <span id="editor">**Set the editor Git will use:**</span> There are a few times that Git will want to open a text editor for you to do something. You should tell it which editor to use (if you don't, it will resort to the `$EDITOR` environment variable). If, for example, you want to use Nano, you should run something like this:
 
   ```
   $ git config --global core.editor nano
@@ -87,7 +89,7 @@ As with many programs, one of the first things that you should do with Git after
           editor = nano
   ```
   
-  This command is a good example of a typical Git command. The main command you're running is `git` followed by some subcommand (in this case `config`). The subcommand is basically like its own program: it has its own set of options and arguments that it expects. Sadly, the options, arguments, and sometimes even syntax of the different subcommands is not consistent, which is why I say Git has a horrible UI.
+  This command is a good example of a typical Git command. The main _command_ you're running is `git` followed by some _subcommand_ (in this case `config`). The subcommand is basically like its own program: it has its own set of options and arguments that it expects. Sadly, the options, arguments, and sometimes even syntax of the different subcommands is not consistent, which is why I say Git has a horrible UI.
   
   **All** that this command does is write to the file `~/.gitconfig`. This file is the global configuration file for Git, which is why we included the `--global` option (we'll talk later about what happens if you don't include that option and why you might want to.) There is nothing particularly magical about this command: you could also just as easily write that same contents to the file yourself. But it's nice because the file obviously has a particular format it expects to be written in, and the command does that for you.
   
@@ -106,6 +108,8 @@ As with many programs, one of the first things that you should do with Git after
                 
   As you can see, the first part of the argument to the `git config` command (after the `--global`) is the "section" (`core` or `color`) and subsection (`editor` and `ui`), separated by a period. The second is the value (`nano` or `auto`). As you might imagine, there are plenty more sections and subsections. For example, it turns out that the `ui` subsection is really just a catch-all: you can also set the different subsections (`color.branch`, `color.diff`, etc.) individually.
   
+  We won't actually get to see the colors in action for a little bit, but trust me, it makes using Git a lot easier.
+  
 3. 	**Name and email:** You should set your name and email. Again, all this will do is set it in the `~/.gitconfig` file: it won't send them to anyone to spam you. The reason this is worth doing is because Git will use it to save your documents under your identity. When you share anything with others, your identity is preserved.
 
   ```
@@ -120,12 +124,14 @@ As with many programs, one of the first things that you should do with Git after
           name = Jane Doe
           email = jane.doe@example.com
    ```
+   
+Before we go on, please note that since all we did is edit `~/.gitconfig`, these decisions can always be changed. If you decide that you prefer a different editor, you can always rerun `git config --global core.editor` or edit the file by hand. Same with colors, name, email, and so on.
                 
 ### Your first repository
 
-Once you have configured Git, you should set up something called a "repository." A repository is just a place for Git to store data. It basically corresponds to a "project." Separate projects should probably have separate repositories. In practice, it will just correspond to some directory (i.e. folder) on your computer.
+Once you have configured Git, you should set up something called a "repository." A _repository_ is just a place for Git to store data. It basically corresponds to a "project." Separate projects should probably have separate repositories. In practice, it will just correspond to some directory (i.e. folder) on your computer.
 
-Repositories are totally self-sufficient. They totally contain everything Git needs to work with them. You can move them around on your hard disk, put them on a flash disk, email them to people, and everything will work just as before (there are a few very specific exceptions, but we can talk about them later).
+Repositories are totally self-sufficient. They totally contain everything Git needs to work with them. You can move them around on your hard disk, put them on a flash disk, email them to people, and everything will work just as before. The only requirement is that the people you share the repository with have Git installed. Additionally, nothing you added in `~/.gitconfig` will be included (that's why it's the "global" configuration file). As you'll see soon, there is an analogous _local_ (i.e. per-repository) configuration that you can do as well. If you make local configurations, those will get shared with anyone you share the repository with.
 
 To start, we'll create an empty repository. If you already have a project that you would like to start using Git with, I recommend waiting to finish this document before trying. That way, you can try changing, moving, and deleting files, and generally play around without worrying about losing real data.
 
@@ -161,13 +167,13 @@ This `.git` directory is the place Git stores all of the data it needs to keep t
 
 One very important thing to emphasize is that Git is **not** a magic tool that somehow runs in the background and keeps track of your files. It is really just a tool for manipulating data in one-off commands. In other words, the `.git` repository is **the only** place that Git keeps track of its state (with the one exception of the "`git config --global`" command, which just manipulates `~/.gitconfig`).
 
-This is a very important principle to understand, because it means that the best way to think about Git is like any other Unix command that manipulates files and directories (e.g. "`cat foo`" or "`find my-directory`" or "`echo "Hello there" > hello.txt`"). Git might be a particularly advanced one, but it doesn't have a concept of "starting up" or "shutting down." All of the state it needs is in this `.git` directory.
+This is a very important principle to understand, because it means that the best way to think about Git is like any other Unix command that manipulates files and directories (e.g. "`cat foo`" or "`find my-directory`" or "`echo "Hello there" > hello.txt`"). Git might be a particularly advanced one, but it doesn't have a concept of "starting up" or "shutting down." All of the state it needs is in this `.git` directory. More generally, Git isn't a program that "runs in the background" like, for example, Dropbox. It doesn't automatically sync anything for you. For example, if you have a repository on Dropbox, nothing you do with Git will modify that until you "push" to it (more on that below).
 
-You pretty much don't need to worry about the contents of this directory (and, given how important it is, it's best not to mess with it for the time being). The only exception is the file `.git/config`, which, as you might be able to guess, is analogous to the `~/.gitconfig` file. If you look inside this file, you will likely see that it already has some configuration options, probably under the `[core]` section. If you run any of the `git config` commands above without the `--global` option, they will end up in this file.
+You pretty much don't need to worry about the contents of this directory (and, given how important it is, it's best not to mess with it for the time being). The only exception is the file `.git/config`, which, as promised, contains the analogous "local configuration" to the global configuration in the `~/.gitconfig` file. If you look inside this file, you will likely see that it already has some configuration options, probably under the `[core]` section. To modify this file, run any of the `git config` commands we ran before, but this time without the `--global` option. They will end up in this file. If you share this repository with anyone, these local configurations will get shared with them, too.
 
 Again, remember that repositories are totally self-sufficient. If you went ahead and created a second repository, say, `~/git-practice/repo2` and ran `git config` (without the `--global`) in there, then `repo2` could have a different configuration from `repo1`. That might be quite useful (e.g. you might want to use different names for different projects). But this also applies to everything else other than configuration. The two repositories can have totally different files and histories from each other. They are totally separate projects.
 
-The last thing to say about repositories in general is that you should generally avoid nesting them. In other words, don't run `git init` inside of `repo1`. It technically works, but it will be very confusing, and unless you're very precise, Git will behave in unexpected ways. There is an advanced Git feature called a "submodule" that is roughly conceptually equivalent to one Git repository inside of another. We'll get to it near the end.
+The last thing to say about repositories is that you should generally avoid nesting them. In other words, don't run `git init` inside of `repo1`. It technically works, but it will be very confusing, and unless you're very precise, Git will behave in unexpected ways. There is an advanced Git feature called a "submodule" that is roughly conceptually equivalent to one Git repository inside of another. We'll get to it near the end.
 
 
 ## How Git thinks about the world
@@ -176,11 +182,11 @@ Before we go any further, it is going to be helpful to describe how Git actually
 
 ### Tree objects
 
-One concept we've already covered is a _repository_. To repeat, a repository is just a self-sufficient collection of data that Git uses to keep track of your files and all their versions. These files are stored in special objects in the repository called _tree objects_, which are basically just representation of the filesystem tree starting at the root of the repository (i.e. where the `.git` directory is). Tree objects contain the contents of files in the repository, along with metadata like filenames and permissions.
+One concept we've already covered is a "repository." To repeat, a _repository_ is just a self-sufficient collection of data that Git uses to keep track of your files and all their versions. These files are stored in special objects in the repository called _tree objects_, which are basically just representation of the filesystem tree starting at the root of the repository (i.e. where the `.git` directory is). Tree objects contain the contents of files in the repository, along with metadata like filenames and permissions.
 
 ### Commit objects
 
-Tree objects, in turn, are contained within objects called _commit objects_. Besides a tree object, a commit object contains metadata like the commit author's name and email (now you see why we configured those earlier!), the date of the commit, a message explaining the commit, and, most importantly **a pointer to the previous commit in the history**.
+Tree objects, in turn, are contained within objects called _commit objects_. A commit object contains a tree object, along with metadata like the commit author's name and email (now you see why we configured those earlier!), the date of the commit, a message explaining the commit, and, most importantly **a pointer to the previous commit in the history**.
 
 Before we go any further, let's talk about that last idea. Commit objects are probably the most important concept in all of Git: they are how Git implements the "version" part of the version control system. Every version of your files is stored in a tree object corresponding to a different commit. If you're looking at a particular commit, you can see the previous commit by following that pointer. You can keep doing that until you reach the first commit, which is the start of the repository's history.
 
@@ -200,16 +206,16 @@ Since 40 characters is a lot to type, you can usually refer to a commit by the f
 
 #### Commits can't be changed
 
-One very important consequence of naming commits via this hash algorithm is that commits can't really be changed. If you change anything about a commit (anything in the tree object it contains, its commit message, or even the commit its pointing to), then the name of the commit (the hash of all that data) will also change. So in effect, commits are _immutable_ meaning they can't really change (at least not without their name and everything that knows about their name also changing). That's why they're called commits. Once you create it, that's the commit.
+One very important consequence of naming commits via this hash algorithm is that commits can't really be changed. If you change anything about a commit (anything in the tree object it contains, its commit message, or even the commit its pointing to), then the name of the commit (the hash of all that data) will also change. So in effect, commits are immutable. That's why they're called commits. Once you create it, that's the commit.
 
-That sounds scary, but it's actually a very good thing. It means that without trying to do so intentionally, Git basically won't let you lose data. If you do anything that changes data and try to commit it, Git will usually create a new commit object for you. Short of removing the `.git` directory or doing some very special things, it's basically impossible to actually lose data with Git.
+That sounds scary, but it's actually a very good thing. It means that without trying to do so intentionally, Git basically won't let you lose data. If you do anything that changes data and try to commit it, Git will usually create a new commit object for you. Short of removing the `.git` directory or running some very special commands, it's basically impossible to permanently lose data with Git.
 
 
 ## Playing with files
 
 ### Our first commit
 
-Enough theory, let's actually do stuff! Now that we have a repository, let's add something to it! First, let's create a few files:
+Enough theory, let's actually do stuff! Now that we have a repository, let's add something to it! Still in that first repository you created (`~/git-practice/repo1/`), let's create a few files:
 
 ```
 $ echo foo > foo.txt
@@ -239,7 +245,7 @@ This is very terse and unhelpful output (which is unfortunately pretty par for t
 
 So let's tell Git about them by creating a commit! To create a commit, you first have to add files to something called "_the staging area_." The staging area is just where you place files that you want to include in your commit. You can put files into the staging area and take them out as you wish. Once you're ready to commit, everything in the staging area is included.
 
-We're going to create a commit that includes two of the files, `foo.txt` and `bar.txt`. So first, let's add them to the staging area. As the output of `git status` says, we can use `git add` for this. Here's what that looks like:
+We're going to create a commit that includes two of the files, `foo.txt` and `bar.txt` (but not `baz.txt`, for now). So first, let's add them to the staging area. As the output of `git status` says, we can use `git add` for this. Here's what that looks like:
 
 <pre><code>$ git add foo.txt
 $ git add bar.txt
@@ -281,7 +287,7 @@ nothing added to commit but untracked files present (use "git add" to track)</co
 
 ### Our second commit
 
-If you want, you can also exclude the `-m` option when creating a commit, in which case Git will open up your configured editor to let you write out your commit message. This is nice if you want to write a long one, especially if it contains newlines. We'll do that for the `baz.txt` file. First, let's add it to the staging area
+For our second commit, we're going to include `baz.txt`. First, let's add it to the staging area:
 
 ```
 $ git add baz.txt
@@ -293,10 +299,11 @@ and let's run `git status` just to make sure (you don't have to do this each tim
 On branch master
 Changes to be committed:
   (use "git reset HEAD &lt;file&gt;..." to unstage)
+  
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="staged">new file:   baz.txt</span></code></pre>
 
-	<span class="staged">new file:   baz.txt</span></code></pre>
-
-This looks correct (we just have `baz.txt` in thes taging area), so let's commit:
+    
+This looks correct (we just have `baz.txt` in the staging area), so let's commit. Note that if you want, you can exclude the `-m` option when creating a commit, in which case Git will open up your configured editor to let you write out your commit message. This is nice if you want to write a long one, especially if it contains newlines. We'll do that for the `baz.txt` file.
 
 ```
 $ git commit
@@ -371,7 +378,7 @@ no changes added to commit (use "git add" and/or "git commit -a")</code></pre>
 You can see that Git noticed that our file changed. It also suggests a few options:
 
 * You can commit the change. To do this, run `git add foo.txt` again, as the output suggests. Note that this is confusing (there's that UI again!) since we're not adding the file to the repository like last time. The "`add`" in `git add` is really talking about adding the file to the staging area.
-* You can discard the change. To do this, Git suggests running `git checkout -- foo.txt`. This command obviously is unintuitive (what does "checkout" have to do with discarding?) and also turns out to not be the only way to accomplish this. We'll discuss this later.
+* You can discard the change, setting `foo.txt` back to its state in the latest commit. To do this, Git suggests running `git checkout -- foo.txt`. This command obviously is unintuitive (what does "checkout" have to do with discarding?) and also turns out to not be the only way to accomplish this. We'll discuss this later.
 
 Note that discarding the change is permanent. Since we've never told Git about this change (i.e. we haven't even added it to the staging area yet, let alone committed it), this is data you **can** lose if you discard it. On the other hand, if you committed it and later did something to lose the commit, chances are that you can get it back. This brings us to an important lesson: **commit early and commit often**. It is **much** better to have too many commits than to few. Git provides a lot of nice tools for making lots of small commits unobtrusive. But if you delete data Git doesn't know about, it's gone for good.
 
@@ -470,7 +477,7 @@ index 0000000..7601807
 <span class="addition">+baz</span>
 </span></code></pre>
 
-This is a nice little view of everything that happened in that commit: the combination of what happened when we ran `git diff` (or, if we didn't run it, what it would have shown) and the commit we wrote for `git commit`. You can also use the `--oneline` option to get an abbreviated version:
+This is a nice little view of everything that happened in that commit: the combination of what happened when we ran `git diff` (or, if we didn't run it, what it would have shown) and the commit message we wrote for `git commit`. You can also use the `--oneline` option to get an abbreviated version:
 
 <pre><code>$ git show --oneline 130fe6b3ba5ea1fb32bb5a5126850b80f248c020
 <span class="sha1">130fe6b</span> This is my second commit, including "baz.txt"
@@ -498,24 +505,8 @@ Date:   Sat May 23 20:19:52 2015 -0400
 
     This is my second commit, including "baz.txt"
     
-    This commit includes the file baz.txt. This file is the best. It just
-    contains the word "baz". Minimalist, I know. That's how I roll. It's
-    very different from the two files in the previous commit, "foo.txt"
-    and "baz.txt". Those files are lame.
-    
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dictum
-    neque quis leo porta lobortis. Fusce et eros in nisi porta
-    dignissim. Donec vitae tellus arcu. Sed convallis, risus ut eleifend
-    pharetra, elit libero eleifend orci, eu dapibus tortor elit in urna.
-
-<span class="diff"><span class="files">diff --git a/baz.txt b/baz.txt
-new file mode 100644
-index 0000000..7601807
---- /dev/null
-+++ b/baz.txt</span>
-<span class="lines">@@ -0,0 +1 @@</span>
-<span class="addition">+baz</span>
-</span></code></pre>
+    [...]
+</code></pre>
 
 <pre><code>$ git show 9b5d324c21ac130ad4b8dc740b1efef49af7daec^
 <span class="sha1">commit 130fe6b3ba5ea1fb32bb5a5126850b80f248c020</span>
@@ -524,26 +515,10 @@ Date:   Sat May 23 20:19:52 2015 -0400
 
     This is my second commit, including "baz.txt"
     
-    This commit includes the file baz.txt. This file is the best. It just
-    contains the word "baz". Minimalist, I know. That's how I roll. It's
-    very different from the two files in the previous commit, "foo.txt"
-    and "baz.txt". Those files are lame.
-    
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dictum
-    neque quis leo porta lobortis. Fusce et eros in nisi porta
-    dignissim. Donec vitae tellus arcu. Sed convallis, risus ut eleifend
-    pharetra, elit libero eleifend orci, eu dapibus tortor elit in urna.
+    [...]
+</code></pre>
 
-<span class="diff"><span class="files">diff --git a/baz.txt b/baz.txt
-new file mode 100644
-index 0000000..7601807
---- /dev/null
-+++ b/baz.txt</span>
-<span class="lines">@@ -0,0 +1 @@</span>
-<span class="addition">+baz</span>
-</span></code></pre>
-
-(Noting that `9b5d324c21ac130ad4b8dc740b1efef49af7daec` is the commit name of the last commit we made (see the `git log` output above)). You can keep appending `^`s to keep going down the history. So for example, `9b5d324c21ac130ad4b8dc740b1efef49af7daec^^` refers to the first commit (i.e. two before the last one). If we had more commits to go, you can keep adding more `^`s.
+(Noting that `9b5d324c21ac130ad4b8dc740b1efef49af7daec` is the commit name of the last commit we made—see the `git log` output above). You can keep appending `^`s to keep going down the history. So for example, `9b5d324c21ac130ad4b8dc740b1efef49af7daec^^` refers to the first commit (i.e. two before the last one). If we had more commits to go, you can keep adding more `^`s.
 
 #### `HEAD`
 
@@ -603,33 +578,7 @@ index 257cc56..186b214 100644
 <span class="addition">+A second line</span>
 </span></code></pre>
 
-Additionally, many commands we've talked about actually secretly expect a commit name, and use `HEAD` if you don't provide one. For example, `git log` will show the log starting at a particular commit:
-
-<pre><code>$ git log 130fe6b3ba5ea1fb32bb5a5126850b80f248c020
-<span class="sha1">commit 130fe6b3ba5ea1fb32bb5a5126850b80f248c020</span>
-Author: Leonid Grinberg <lgrinberg@gmail.com>
-Date:   Sat May 23 20:19:52 2015 -0400
-
-    This is my second commit, including "baz.txt"
-    
-    This commit includes the file baz.txt. This file is the best. It just
-    contains the word "baz". Minimalist, I know. That's how I roll. It's
-    very different from the two files in the previous commit, "foo.txt"
-    and "baz.txt". Those files are lame.
-    
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras dictum
-    neque quis leo porta lobortis. Fusce et eros in nisi porta
-    dignissim. Donec vitae tellus arcu. Sed convallis, risus ut eleifend
-    pharetra, elit libero eleifend orci, eu dapibus tortor elit in urna.
-
-<span class="sha1">commit 9c090e5ebeeeaeada4f3117538eb9ba48ba67296</span>
-Author: Leonid Grinberg <lgrinberg@gmail.com>
-Date:   Sat May 23 20:12:06 2015 -0400
-
-    My first commit.
-</code></pre>
-
-In our earlier examples, since we didn't provide a commit, it behaved as if we provided `HEAD` and showed us the whole log since the last commit.
+Additionally, many commands we've talked about actually secretly expect a commit name, and use `HEAD` if you don't provide one. For example, `git log` actually shows the file at a particular commit, and just defaults to `HEAD` if you don't provide one. If you give it a commit, it will start at that commit. Try it!
 
 Even `git diff` operates as if we provided a commit name, using `HEAD` if we didn't provide one. So if you change a file and run `git diff` (which is the same as running `git diff HEAD`) it will show you everything that changed since the previous commit. But if you run `git diff` with a particular commit, it will show you everything that changed since **that** commit. So for example, if we don't change any files and run `git diff HEAD^`, we will see everything that changed since the second-to-last commit, which is almost equivalent to running `git show HEAD`:
 
@@ -666,14 +615,11 @@ As you can see, the only difference is that the `git show HEAD` version also sho
 
 Let's quickly review what a commit contains. Besides all the usual stuff like the name, date, commit message, and tree contents, it also includes a pointer to the previous commit. One interesting consequence of this is that in theory two commits could point to the same "previous" commit. If you drew it out on paper, it would look something like this:
 
-<pre>
-A &lArr; B &lArr; C &lArr; D
-       &#8662; E &lArr; F        
-</pre>
+<center>![Basic branch situation](branch-explanation.png)</center>
 
-In the above (admittedly crude) diagram, the commits `C` and `E` are both pointing back to the same commit `B`. In other words, both `C^` and `E^` both refer to `B`.
+In the above diagram, the commits `C` and `E` are both pointing back to the same commit `B`. In other words, both `C^` and `E^` both refer to `B`.
 
-This situation is known as a "_branch_." We'll provide a more formal definition in a moment, but for now, conceptually, `D` and `F` are the tips of two different branches. Git lets you easily create branches and also easily switch between them. This is a very useful feature. It essentially lets you work on two parallel "universes" in which your repository is in different states. Coders often use this to work on different new features that are being developed at the same time as they need to work on patching up old bugs. But you can use this for all sorts of things: from trying out some new idea to separating out different options for what a file can say.
+This situation is known as a "_branch_." We'll provide a more formal definition in a moment, but for now, conceptually, `D` and `F` are the tips of two different branches. Git lets you easily create branches and also easily switch between them. This is a very useful feature. It essentially lets you work on two parallel "universes" in which your repository is in different states. Coders often use this to work on different new features that are being developed at the same time as they patch up old bugs. But you can use this for all sorts of things: from trying out some new idea to separating out different options for the contents of a file.
 
 ### How branches work
 
@@ -682,6 +628,12 @@ A branch in Git is actually an extremely simple concept. It really is just what 
 Thus, everything we've talked about so far applies. Two branches can have a lot in common or very little. They're just histories of commits pointing back (ultimately to some common ancestor), so they can contain commits that totally delete files, change them, add lines, whatever. 
 
 The only additional thing that a branch has is the branch _name_, which is technically a _reference_ to a commit. Think of it as a label that points to a particular commit—in particular, the last commit on that branch. So you can think of the name as that branch's personal `HEAD`.
+
+From Git's internal point of view, that "reference" is actually all that matters as far as keeping track of the branch. When you create a branch, you give it a name and a commit to point to, which creates the history as far as that branch is concerned. You don't actually need a branching situation like in the diagram above, where each branch contains commits that the other doesn't have.
+
+For example, if you just have a linear history (like we were working on before) with Branch A pointing to the second commit and Branch B pointing to the third, that's still valid, even though Branch B totally contains Branch A. Think of it like a **branch in history**. From the point of view of Branch A, the third commit never happened. Additionally, if you were to switch to Branch A and make a commit, that commit would _not_ be included in Branch B (and a branching situation that looks more like the one drawn above would occur).
+
+### Our first branch
 
 It turns out that we already have a branch name, called `master`. If you look through some of the commands above, there are references to it in the output. If you run `git branch`, you'll see that it's currently the only branch and that it's the current branch (we'll discuss what this means in a moment):
 
@@ -742,7 +694,13 @@ In the output of `git branch` we see that one branch has an asterisk next to it 
 
 It's actually quite simple. The current branch is the one that moves with `HEAD`. Remember how earlier we said that `HEAD` always points to the latest commit? If we have multiple branches, we can only add a commit to one of them at a time. `HEAD` will move up to point to the latest commit we added, and the label for the current branch will move with it. The rest will not.
 
-So, given the situation we have now, let's make a new commit. For example, let's add one more line to `foo.txt`:
+Before we go any further, let's quickly draw out the current situation:
+
+<center>![Current situation](three-branches-three-commits.png)</center>
+
+The commits are the olive circles, the branch locations are the yellow labels, and `HEAD` is the green arrow. `master` has an asterisk next to it to indicate that it's the current branch.
+
+So, given this situation, let's make a new commit. For example, let's add one more line to `foo.txt`:
 
 ```
 $ echo "A third line" >> foo.txt
@@ -752,21 +710,21 @@ $ git commit -m "Adding another line to foo.txt"
  1 file changed, 1 insertion(+)
 ```
 
-The output from `git commit` is now pretty relevant. We see that we made a new commit, whose abbreviated name is `2d35a8b`. We also see that that commit was added to the `master` branch. Indeed, we can verify this with `rev-parse`:
+The output from `git commit` is now pretty relevant. We see that we made a new commit, whose abbreviated name is `2d35a8b`. We also see that that commit was added to the `master` branch. `HEAD` should have moved up as well. Here is what the new situation should look like:
+
+<center>![Current situation](three-branches-four-commits.png)</center>
+
+
+Let's verify that `master` and `HEAD` moved up:
 
 ```
 $ git rev-parse --short master
 2d35a8b
-```
-
-As promised, `HEAD` moved up as well.
-
-```
 $ git rev-parse --short HEAD
 2d35a8b
 ```
 
-But the other branches did not:
+And let's also verify that the other two branches did not:
 
 ```
 $ git rev-parse --short a-new-branch
@@ -775,11 +733,11 @@ $ git rev-parse --short another-branch
 130fe6b
 ```
 
-That's what we mean by "current branch" and also why I said earlier that a branch name is like that branch's personal `HEAD`.
+So this is what we mean by "current branch": it's the branch that will move up with `HEAD` when we make a commit.
 
 ### Switching between branches
 
-So far, all we've really done is created more ways to refer to commits. We haven't actually created the branching situation we were discussing at the beginning of this section. To do that, we'll need some way to change the current branch. If we could change the current branch to `a-new-branch`, for example, we could create a new commit there and we would have a branching situation. That new commit, as well as the commit we just made, would both be pointing to commit `9b5d324` (which `a-new-branch` currently points to).
+So far, all we've really done is created more ways to refer to commits. We haven't actually created the branching situation we were discussing at the beginning of this section. To do that, we'll need some way to change the current branch. If we could change the current branch to `a-new-branch`, for example, we could create a new commit there and we would have a situation with a non-linear history.
 
 To switch the current branch, you can use the `git checkout` command. For example:
 
@@ -862,9 +820,15 @@ fatal: Path 'baz.txt' exists on disk, but not in 'HEAD^'.
 
 That's because we didn't include `baz.txt` in our first commit (the one that comes right before what `another-branch` is pointing to). So it doesn't exist in the tree at that commit.
 
-#### Creating the branching situation
+#### Creating the non-linear history
 
-Enough fooling around, let's actually make the branching situation we started this whole section with. As a reminder, we're currently on `another-branch`. Let's make a change to `foo.txt`, like this:
+Enough fooling around, let's actually make that non-linear branching situation we started this whole section with. As a reminder, we're currently on `another-branch`. If you were playing around on your own, make sure to switch to it before continuing.
+
+```
+$ git checkout another-branch
+```
+
+Let's make a change to `foo.txt`, like this:
 
 ```
 $ echo "A weird new line" >> foo.txt
@@ -877,18 +841,9 @@ $ git commit -m "Added a weird new line to foo.txt"
  1 file changed, 1 insertion(+)
 ```
 
-For those following along at home, here is what the current branch structure looks like:
+Here's what our history looks like now!
 
-<pre><code>* <span class="sha1">2d35a8b</span> - Adding another line to foo.txt <span class="branch-name">(master)</span>
-| 
-* <span class="sha1">9b5d324</span> - Added a line to foo.txt <span class="branch-name">(a-new-branch)</span>
-|
-| * <span class="sha1">3872343</span> - Added a weird new line to foo.txt <span class="branch-name">(HEAD, another-branch)</span>
-|/
-* <span class="sha1">130fe6b</span> - This is my second commit, including "baz.txt"
-|
-* <span class="sha1">9c090e5</span> - My first commit.
-</code></pre>
+<center>![Non-linear history!](three-branches-five-commits-non-linear.png)</center>
 
 As before, the `diff` command can be useful to see what the changes were on different branches:
 
@@ -903,7 +858,7 @@ index 186b214..7e85653 100644
 <span class="addition">+A weird new line</span>
 </span></code></pre>
 
-In other words, to get from `a-new-branch` to `another-branch` (implicitly, `HERE` in the `git diff` command), you have to remove "`A second line`" and add "`A weird new line`". Similarly, to get from `master` to `another-branch`, you have to remove "`A second line`" and "`A third line`" and add "`A weird new line`".
+In other words, to get from `a-new-branch` to `another-branch`, you have to remove "`A second line`" and add "`A weird new line`". Similarly, to get from `master` to `another-branch`, you have to remove "`A second line`" and "`A third line`" and add "`A weird new line`".
 
 <pre><code>$ git diff master
 <span class="diff"><span class="files">diff --git a/foo.txt b/foo.txt
@@ -917,6 +872,7 @@ index 186b214..7e85653 100644
 <span class="addition">+A weird new line</span>
 </span></code></pre>
 
+Note that in the above two commands, we never listed `a-new-branch`. That's because we're on that branch, which means that `HEAD` is pointing to its last commit. `HEAD` is implicit in the `diff` command, so we don't have to include it.
 
 <style>
 pre code div, pre code span { white-space: pre; font-family: monospace; }
