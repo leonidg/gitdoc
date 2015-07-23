@@ -874,6 +874,35 @@ index 186b214..7e85653 100644
 
 Note that in the above two commands, we never listed `a-new-branch`. That's because we're on that branch, which means that `HEAD` is pointing to its last commit. `HEAD` is implicit in the `diff` command, so we don't have to include it.
 
+### Merging branches
+
+### Rebasing branches
+
+#### Simple rebasing
+
+#### Interactive rebasing
+
+## Remote repositories
+
+### Cloning
+
+### Fetching
+
+#### Pulling
+
+### Pushing
+
+#### Forcing pushes
+
+### Adding remotes
+
+### Submodules
+
+## The reflog
+
+## Appendix: A list of commands we've covered and some we haven't
+
+
 <style>
 pre code div, pre code span { white-space: pre; font-family: monospace; }
 pre code { background-color: inherit; white-space: inherit; }
