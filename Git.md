@@ -490,7 +490,7 @@ index 0000000..7601807
 <span class="addition">+baz</span>
 </span></code></pre>
 
-You can see that Git will show a shorter version of the hash, since it doesn't need to use all 40 characters to uniquely identify the commit (it actually doesn't even need all the characters it's showing, but it will never show fewer than 8). It also only shows the first line of your commit, which is why it's customary to give a very brief summary of the commit in that one line.
+You can see that Git will show a shorter version of the hash, since it doesn't need to use all 40 characters to uniquely identify the commit (it actually doesn't even need all the characters it's showing, but it will never show fewer than 7). It also only shows the first line of your commit, which is why it's customary to give a very brief summary of the commit in that one line.
 
 ### A commit by any other name...
 
