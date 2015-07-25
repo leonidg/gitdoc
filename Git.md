@@ -1004,9 +1004,133 @@ index 186b214..7e85653 100644
 
 Note that in the above two commands, we never listed `a-new-branch`. That's because we're on that branch, which means that `HEAD` is pointing to its last commit. `HEAD` is implicit in the `diff` command, so we don't have to include it.
 
-### Merging branches
+From here, we can make new changes. For example, let's add a new line to `baz.txt` (make sure you're on `another-branch` if you're following along):
 
-### Rebasing branches
+```
+$ echo yadda-yadda >> baz.txt
+$ git commit -am "Yadda-yadda baz.txt"
+[another-branch d1b3c8b] Adding a line to baz.txt
+ 1 file changed, 1 insertion(+)
+```
+
+As before, these changes are only visible on this branch:
+
+```
+$ cat baz.txt
+baz
+yadda-yadda
+$ git show master:baz.txt
+baz
+```
+
+## Bringing branches back together
+
+Branches are used for lots of things. Programmers, for example, often find them useful because they let them work on different parts of code at the same time, with changes in one area not affecting the other until everything is completed. At some point, however, it's useful to bring those changes back together. How could we do that?
+
+### Fast-forwards
+
+Imagine that Alice and Bob are working on the same project, which only has one branch, called `master`. One day, Alice comes in and makes a new branch off of the tip of master, called `alice`. She makes a number of commits on that branch, finishing off an important feature.
+
+At this point, even though their project technically has two branches, one of those branches, `alice`, totally contains the other branch, `master`. So to bring the changes from `alice` into `master`, one would effectively just need to move the commit that `master` points to to be the one that `alice` points to. There's nothing really to do except to relabel `master`.
+
+This situation is known as a _fast-forward_, so-called because it's an easy and fast operation: just move the pointer from `master` to `alice`. Fast-forwards are a very important concept in Git that you will see come up in other places. They're very fast and safe operations because they only require modifying labels and not actually manipulating the repository's history at all.
+
+But imagine if we weren't so lucky. Imagine, for example, that while Alice was making her changes on the `alice` branch, Bob was making different changes on the `bob` branch, that was also rooted off of `master`. How could those changes be brought together?
+
+
+### Merging
+
+One way to do it is via something called a "merge commit." A _merge commit_ is a very special commit that has **two** predecessors instead of one—one from each branch that is being merged together.
+
+Unfortunately, merging can be a difficult process. Whereas in a fast-forward commit, one branch contains a superset of the information of another, in the case of two divergent branches, their information has to somehow be brought together into one state. Git tries as hard as possible to do this automatically, but it can't always figure out what to do automatically. Let's take a look.
+
+To merge one branch into another, you can use the `git merge` command. For example, if we switch back to `master`, we can merge in `another-branch` by running `git merge another-branch`.
+
+```
+$ git checkout master
+$ git merge another-branch
+Auto-merging foo.txt
+CONFLICT (content): Merge conflict in foo.txt
+Automatic merge failed; fix conflicts and then commit the result.
+```
+
+It looks like there was a conflict. Let's take a look at what's going on:
+
+<pre><code>$ git status
+On branch master
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+
+Changes to be committed:
+
+	<span class="staged">modified:   baz.txt</span>
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+	<span class="unstaged">both modified:   foo.txt</span></code></pre>
+	
+It looks like Git was able to automatically merge `baz.txt` but not `foo.txt`. That makes sense. The change in `baz.txt` that was in `another-branch` was just an extra line that wasn't in `master`. So to merge it, we can just include the line. But with `foo.txt`, the situation is more complicated. There were two lines in `master` that weren't in `another-branch` and one line in `another-branch` that wasn't in master. Here's what happened to the file after the `git merge`:
+
+<pre><code>$ git diff foo.txt
+<span class="diff"><span class="files">diff --cc foo.txt
+index 106206e,7e85653..0000000
+--- a/foo.txt
++++ b/foo.txt</span>
+<span class="lines">@@@ -1,3 -1,2 +1,7 @@@</span>
+  foo
+<span class="addition">++&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+ +A second line
+ +A third line
+++=======
++ A weird new line
+++&gt;&gt;&gt;&gt;&gt;&gt;&gt; another-branch
+</span></span></code></pre>
+
+Git puts in these weird little markers to show what the problem was. As you can see, in `HEAD` (which is `master`), we had two lines, "`A second line`" and "`A third line`". But in `another-branch`, which we are trying to merge in, that area was replaced with a different line, "`A weird new line`".
+
+There is no way for Git to know how to combine those. It depends on what the merge means. Maybe one of those is correct (e.g. maybe `another-branch` was supposed to fix `master` by modifying that part of `foo.txt`). Or maybe the lines in `master` were somehow compatible with those in `another-branch`.
+
+The only way to tell Git is to make the file look the way you want it to. In our case, let's include all three lines. Open the file in your favorite text editor and remove the Git markings, making the file have all three lines. At the end, you should have this:
+
+```
+$ cat foo.txt 
+foo
+A second line
+A third line
+A weird new line
+```
+
+Here is what happens when you run `git diff`:
+
+<pre><code>$ git diff
+<span class="diff"><span class="files">diff --cc foo.txt
+index 106206e,7e85653..0000000
+--- a/foo.txt
++++ b/foo.txt</span>
+<span class="lines">@@@ -1,3 -1,2 +1,4 @@@</span>
+  foo
+<span class="addition"> +A second line
+ +A third line
++ A weird new line</span></code></pre>
+
+If you look carefully, you'll see that the little green `+` signs aren't all aligned. This is intentional. It shows that the first two files came from one branch and the third from a different one. It's a nice sanity check to show you what you ended up deciding to do.
+
+To tell Git that we're satisfied, we can use `git add` to add the fixed file into our merge commit. Normally, you would need to do a resolution like this with every file, but in our case, `foo.txt` was the only file Git was having trouble with. So once we add, we can also do the commit.
+
+```
+$ git add foo.txt
+$ git commit -m "Merged another-branch into master"
+[master 1eb79b4] Merged another-branch into master
+```
+
+This is what our branch history looks like now:
+
+....IMAGE....
+
+### Rebasing
+
+### Conflicts
 
 #### Simple rebasing
 
