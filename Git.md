@@ -610,6 +610,136 @@ index 257cc56..186b214 100644
 
 As you can see, the only difference is that the `git show HEAD` version also shows the commit parts (i.e. the commit hash, the author, the date, and the commit message) whereas the `git diff HEAD^` version only shows the difference since the previous commit.
 
+## Undoing changes
+
+As I said before, Git makes it very hard to lose data once it learns about it. In this section, we're going to look at some of the ways Git lets us make changes—and also to undo them.
+
+We've already seen a way to do this in the simplest case: discarding a change that was made and not committed. Recall that after we made a change to `foo.txt`, we were able to get rid of it like it never happened. Let's try something like that again.
+
+First, let's delete a file.
+
+```
+$ rm foo.txt
+$ ls
+bar.txt baz.txt
+```
+
+Since Git knows about this file, it notices that it's missing.
+
+<pre><code>$ git status
+On branch old-master
+Changes not staged for commit:
+  (use "git add/rm <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	<span class="unstaged">deleted:    foo.txt</span>
+
+no changes added to commit (use "git add" and/or "git commit -a")</code></pre>
+
+Now, let's bring it back!
+
+```
+$ git checkout -- foo.txt
+$ ls
+bar.txt baz.txt foo.txt
+$ git status
+On branch old-master
+nothing to commit, working directory clean
+```
+
+`git checkout --` is very weird syntax, and this command reverts files almost as a byproduct of what it's supposed to do (which we will cover in the next section). There is another command that can accomplish something similar, which is `git reset --hard`. First, let's modify `foo.txt` (we could delete it again, but just to try something different):
+
+<pre><code>$ echo gibberish > foo.txt
+$ git status
+On branch old-master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	<span class="unstaged">modified:   foo.txt</span>
+
+no changes added to commit (use "git add" and/or "git commit -a")
+</code></pre>
+
+And now, let's undo it.
+
+```
+$ git reset --hard
+HEAD is now at 9b5d324 Added a line to foo.txt
+$ git status
+On branch old-master
+nothing to commit, working directory clean
+```
+
+This command is a little more straightforward than `git checkout --`. It brings the state of Git exactly back to the state at a particular commit. All data (that Git knows about) that were changed in that time are brought back exactly to the state they were in at that commit. This is why we didn't have to specify that it was `foo.txt`—it doesn't undo individual files, it undoes **everything**.
+
+In some ways, the fact that this can be used to undo uncommitted changes to a file is also almost an accident. This command takes a commit to reset back to, and since we didn't provide one, it used `HEAD` as a default. So in effect, running `git reset --hard HEAD` says "bring the state of the repository back to the latest commit." In other words, totally undo all the changes made since then.
+
+You might be wondering, "what would happen if we did, for example, `git reset --hard HEAD^`?" Would it actually delete the most recent commit and bring us back to the one before that? The answer is yes—sort of. The repository would indeed be made to look exactly like the previous commit and if you ran `git log`, the commit that `HEAD` used to point to would not appear. It would look as if that commit was lost forever.
+
+In actuality, it wouldn't be. That's because Git actually keeps around objects for a while, even if nothing is pointing to them. Every so often, it runs a process called "garbage collection" in which those commits get deleted. But that doesn't happen for a while, and until then the commit would be available. Let's try it!
+
+First, let's remind ourselves of the name of the current commit (i.e. what `HEAD` is pointing to).
+
+```
+$ git rev-parse --short HEAD 
+9b5d324
+```
+
+With that safely written down, let's go ahead and take the plunge:
+
+<pre><code>$ git reset --hard HEAD^
+HEAD is now at 130fe6b This is my second commit, including "baz.txt"
+$ git log --oneline
+<span class="sha1">130fe6b</span> This is my second commit, including "baz.txt"
+<span class="sha1">9c090e5</span> My first commit.</code></pre>
+
+Indeed, it looks like our commit is gone for good! If you look around the directory, the changes in our files will look like they have disappeared. But don't worry, we can get them back!
+
+<pre><code>$ git reset --hard 9b5d324
+HEAD is now at 9b5d324 Added a line to foo.txt
+$ git log --oneline
+<span class="sha1">9b5d324</span> Added a line to foo.txt
+<span class="sha1">130fe6b</span> This is my second commit, including "baz.txt"
+<span class="sha1">9c090e5</span> My first commit.</code></pre>
+
+Near the end of this document, we'll talk about an advanced feature called the "reflog" that can help if you do something like this by accident and forget to write down the hash you want to get back.
+
+Before we go on, it's worth noting that `git reset` has other options besides just `--hard`. One is `git reset --soft`. This command will change `HEAD` to point back to the given commit, but it will keep the state of the files such that if you ran `git commit` again, you would get back your original commit. This is probably best explained with an example:
+
+<pre><code>$ git log --oneline
+<span class="sha1">9b5d324</span> Added a line to foo.txt
+<span class="sha1">130fe6b</span> This is my second commit, including "baz.txt"
+<span class="sha1">9c090e5</span> My first commit.
+$ git reset --soft HEAD^^
+$ git log --oneline
+<span class="sha1">9c090e5</span> My first commit.
+$ git status
+On branch old-master
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+         <span class="staged">new file:   baz.txt</span>
+         <span class="staged">modified:   foo.txt</span>
+$ cat foo.txt
+foo
+A second line
+$ cat baz.txt
+baz
+</code></pre>
+
+In other words, the directory contents remains the same, but it's being applied to the first commit (we reset back to `HEAD^^`). From that commit's point of view, `foo.txt` is modified (to have an extra line) and `baz.txt`. Notice that the changes are staged to be committed (as if you had ran `git add`).
+
+Again, we can reset back to where we were with `git reset --hard`.
+
+<pre><code>$ git reset --hard 9b5d324
+HEAD is now at 9b5d324 Added a line to foo.txt
+$ git log --oneline
+<span class="sha1">9b5d324</span> Added a line to foo.txt
+<span class="sha1">130fe6b</span> This is my second commit, including "baz.txt"
+<span class="sha1">9c090e5</span> My first commit.</code></pre>
+
+Another option for `git reset` is `--mixed`. This is actually the default, if you don't specify anything. It will behave just like `--soft`, but it won't actually stage the changes.
 
 ## Branches
 
