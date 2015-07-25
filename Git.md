@@ -1054,7 +1054,7 @@ CONFLICT (content): Merge conflict in foo.txt
 Automatic merge failed; fix conflicts and then commit the result.
 ```
 
-It looks like there was a conflict. Let's take a look at what's going on:
+It looks like there was a problem. Let's take a look at what's going on:
 
 <pre><code>$ git status
 On branch master
@@ -1070,7 +1070,9 @@ Unmerged paths:
 
 	<span class="unstaged">both modified:   foo.txt</span></code></pre>
 	
-It looks like Git was able to automatically merge `baz.txt` but not `foo.txt`. That makes sense. The change in `baz.txt` that was in `another-branch` was just an extra line that wasn't in `master`. So to merge it, we can just include the line. But with `foo.txt`, the situation is more complicated. There were two lines in `master` that weren't in `another-branch` and one line in `another-branch` that wasn't in master. Here's what happened to the file after the `git merge`:
+It looks like Git was able to automatically merge `baz.txt` but not `foo.txt`. That makes sense. The change in `baz.txt` that was in `another-branch` was just an extra line that wasn't in `master`. So to merge it, we can just include the line. But with `foo.txt`, the situation is more complicated. There were two lines in `master` that weren't in `another-branch` and one line in `another-branch` that wasn't in master. This situation is known as a _merge conflict_.
+
+Here's what happened to the file after the `git merge`:
 
 <pre><code>$ git diff foo.txt
 <span class="diff"><span class="files">diff --cc foo.txt
