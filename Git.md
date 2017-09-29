@@ -6,22 +6,22 @@ By Leonid Grinberg
 
 Git is a type of software known as a _version control system_. As the name implies, a version control system is a program that keeps track of versions of your files. In this context, a _version_ is just a particular state of a file (or collection of files). Any change you make could be called a new version. A version control system (or VCS) helps you declare, name, and generally manage your files and their different versions.
 
-In principle, any type of file or collections of files can be managed by a VCS. The largest category of people that tend to use a VCS, however, are software developers. This is because software developers tend to work in groups on very large collections of files, and even small changes can have huge consequences on how the software works. Additionally, most VCS programs (including Git) have functionality for sharing files and their different versions, which is particularly useful for software developers.
+In principle, any type of file or collections of files can be managed by a VCS. The largest category of people that tend to use a VCS, however, are software developers. This is because software developers tend to work in groups on very large collections of files, and even small changes can have huge consequences on how the software works. Additionally, most VCS programs (including Git) have functionality for sharing files and their different versions, which is particularly useful for software developers who tend to collaborate in large teams.
 
 That said, there is nothing really special about code. Code is (usually) just text, and a VCS that can manage code well can probably manage any other kind of text well, too. So if you have heard of Git but are not a programmer, don't despair! Git can be useful for you too. For example, if you tend to write essays, notes, or any other kind of text, Git might be the tool for you.
 
-Just one caveat: For various reasons, Git is **not** good at working with binary files. Binary files are any files that are not just plain text (e.g. you couldn't open them in TextEdit on OS X or Notepad on Windows). Microsoft Word files, for example, while "text files," also contain lots of formatting and other data that don't make them suitable for Git. You'll need to be working with plain text. That said, there are many VCS-like features in those programs too; think about "Track Changes" in Microsoft Word.
+Just one caveat: For various reasons, Git is **not** good at working with binary files. Binary files are any files that are not just plain text (e.g. you couldn't open them in TextEdit on OS X or Notepad on Windows). Microsoft Word files, for example, while full of "text," also contain lots of formatting and other data that don't make them suitable for Git. You'll need to be working with plain text. That said, there are many VCS-like features in those programs too; think about "Track Changes" in Microsoft Word.
 
 
 ## About this document
 
 Git is a unique piece of software. With breathtaking speed, it has found itself to be **the** standard for code sharing and version control, both in industry and open source communities. Several companies have staked massive fortunes on it: [GitHub](https://github.com), for instance, now uses it to host much of the systems and frameworks that collectively make up the modern web, not to mention an increasingly large amount of proprietary company code.
 
-And yet, despite being so widely used, there's a surprising dearth of good documentation about **how** to use it. Most existing documentation falls into one of two categories. Some pieces, like the [GitHub bootcamp](https://help.github.com/categories/bootcamp/) are essentially quick-and-dirty "tutorials": their goal is to teach users how to accomplish a particular task with Git by listing out a few commands and not really explaining what those commands are doing. This works for a little while, but the problem is that Git, while a very powerful tool, has a **horrible** UI. As a result, it's just a matter of time before users make a mistake and find themselves in a state the tutorial doesn't cover.
+And yet, despite being so widely used, there's a surprising dearth of good documentation about **how** to use it. Most existing documentation falls into one of two categories. Some pieces, like the [GitHub bootcamp](https://help.github.com/categories/bootcamp/) are essentially quick-and-dirty "tutorials": their goal is to teach users how to accomplish a particular task with Git by listing out a few commands and not really explaining what those commands are doing. This works for a little while, but the problem is that Git, while a very powerful tool, has a **horrible** user interface. As a result, it's just a matter of time before users make a mistake and find themselves in a state the tutorial doesn't cover.
 
 The other type of documentation suffers from the opposite problem: it goes into **too much** detail. The best example of this is the ["Git Internals" chapter of the Git Book](http://git-scm.com/book/en/v2/Git-Internals-Plumbing-and-Porcelain). It explains in meticulous detail how Git works under the hood. By the end of it, you're either bored or fascinated, but you've certainly forgotten what task you were trying to accomplish in the first place.
 
-Both of these approaches suffer from the same fundamental problem: they don't capitalize on the fact that Git is not just a powerful tool, but an elegant one. While its UI is indeed horrible, the principles behind the tool are remarkably clean and simple. They are concepts that are embodied by the UI (such as it is) and are generic enough to accomplish any task. At the same time, it is **not** necessary to understand the program's internals to learn how ot use Git (in fact, doing so can undermine the learning process). If you can get past the clunky UI to the underlying principles it is trying to expose, you can learn to use Git well.
+Both of these approaches suffer from the same fundamental problem: they don't capitalize on the fact that Git is not just a powerful tool, but an elegant one. While its UI is indeed horrible, the principles behind the tool are clean, simple, and elegant. They are concepts that are embodied by the UI (such as it is) and are generic enough to accomplish any task. At the same time, it is **not** necessary to understand the program's internals to learn how to use Git (in fact, doing so can undermine the learning process). If you can get past the clunky UI to the underlying principles it is trying to expose, you can learn to use Git well.
 
 This document aims to teach how to use Git using those principles.
 
@@ -29,7 +29,7 @@ This document aims to teach how to use Git using those principles.
 
 You do **not** have to have tried using Git before to read this document. You also do not need to be a programmer, or even want to use Git for code. As explained in the first section, Git is fundamentally just a tool for manipulating text, and you can use it to keep track of any kind of plain text. (However, it's not good for binary data.)
 
-That said, this document does have some prerequisites. The most important one is that you need to be comfortable using the Unix command line. This doesn't mean you need to be a pro, or even an advanced user. It just means you should understand what "running commands" mean and can understand Unix-y shortcuts like "`~`" (e.g. "`~/.gitconfig`"), as well as the concept of "hidden files" (i.e. files that begin with a `.` that `ls` won't show you but `ls -a` will). While there are some [visual](https://mac.github.com/) [programs](https://www.sourcetreeapp.com/) that technically make it possible to use Git while avoidings the command line, I think it is worth learning the commands before switching to the GUI-only approach. The programs are getting quite good, but they nonetheless bring their own interpretations and concepts to the table that I believe will end up being confusing—at least while you're learning.
+That said, this document does have some prerequisites. The most important one is that you need to be comfortable using the Unix command line. This doesn't mean you need to be a pro, or even an advanced user. It just means you should understand what "running commands" mean and can understand Unix-y shortcuts like "`~`" (e.g. "`~/.gitconfig`"), as well as the concept of "hidden files" (i.e. files that begin with a `.` that `ls` won't show you but `ls -a` will). While there are some [visual](https://mac.github.com/) [programs](https://www.sourcetreeapp.com/) that technically make it possible to use Git without using the command line, I think it is worth learning the commands before switching to the GUI-only approach. The programs are getting quite good, but they nonetheless bring their own interpretations and concepts to the table that I believe will end up being confusing&mdash;at least while you're starting out.
 
 **Note for Windows users:** If you're on Windows, the Git installation will usually come with a small version of the Unix command line (often called "Git Bash" or similar). You can use it to run all of these same commands. Do **not** use Command Prompt.
 
@@ -42,7 +42,7 @@ Finally, a prerequisite for using this document is having [downloaded and instal
 
 To make reading this document as easy as possible, I try to be consistent in how I format certain things and what syntax I use. Here's a quick summary:
 
-* General "computery" things are written in `monospace font`. This includes things like commands, file names, the contents of files, and so on.
+* General "computer-y" things are written in `monospace font`. This includes things like commands, file names, the contents of files, and so on.
 
 * Anything indented in monospace that begins with a `$` sign is a command you should enter. For example:
 
@@ -91,7 +91,7 @@ As with many programs, one of the first things that you should do with Git after
   
   This command is a good example of a typical Git command. The main _command_ you're running is `git` followed by some _subcommand_ (in this case `config`). The subcommand is basically like its own program: it has its own set of options and arguments that it expects. Sadly, the options, arguments, and sometimes even syntax of the different subcommands is not consistent, which is why I say Git has a horrible UI.
   
-  **All** that this command does is write to the file `~/.gitconfig`. This file is the global configuration file for Git, which is why we included the `--global` option (we'll talk later about what happens if you don't include that option and why you might want to.) There is nothing particularly magical about this command: you could also just as easily write that same contents to the file yourself. But it's nice because the file obviously has a particular format it expects to be written in, and the command does that for you.
+  **All** that this command does is write to the file `~/.gitconfig`. This file is the global configuration file for Git, which is why we included the `--global` option (we'll talk later about what happens if you don't include that option and why you might want to do so). There is nothing particularly magical about this command: you could also just as easily write that same contents to the file yourself. But it's nice because the file obviously has a particular format it expects to be written in, and the command does that for you.
   
 2. **Tell Git to use colors:** This is simple and helpful. Most newer versions of Git come with this enabled by default, but it's still worth explicitly configuring:
 
@@ -99,7 +99,7 @@ As with many programs, one of the first things that you should do with Git after
   $ git config --global color.ui auto
   ```
       
-  Once again, take a look at `~/.gitconfig`. It should now have something like this:
+  Once again, take a look at `~/.gitconfig`. It should now also include something like this:
   
   ```  
   [color]
@@ -131,13 +131,13 @@ Before we go on, please note that since all we did is edit `~/.gitconfig`, these
 
 Once you have configured Git, you should set up something called a "repository." A _repository_ is just a place for Git to store data. It basically corresponds to a "project." Separate projects should probably have separate repositories. In practice, it will just correspond to some directory (i.e. folder) on your computer.
 
-Repositories are totally self-sufficient. They totally contain everything Git needs to work with them. You can move them around on your hard disk, put them on a flash disk, email them to people, and everything will work just as before. The only requirement is that the people you share the repository with have Git installed. Additionally, nothing you added in `~/.gitconfig` will be included (that's why it's the "global" configuration file). As you'll see soon, there is an analogous _local_ (i.e. per-repository) configuration that you can do as well. If you make local configurations, those will get shared with anyone you share the repository with.
+Repositories are totally self-sufficient. They contain everything Git needs to work with them. You can move them around on your hard disk, put them on a flash disk, email them to people, and everything will work just as before. The only requirement is that the people you share the repository with have Git installed. Additionally, nothing you added in `~/.gitconfig` will be included (that's why it's the "global" configuration file). As you'll see soon, there is an analogous _local_ (i.e. per-repository) configuration that you can do as well. If you make local configurations, those will get shared with anyone you share the repository with.
 
 To start, we'll create an empty repository. If you already have a project that you would like to start using Git with, I recommend waiting to finish this document before trying. That way, you can try changing, moving, and deleting files, and generally play around without worrying about losing real data.
 
 The only important thing to note is that **Git does not play well with systems that automatically change files underneath it, such as [Dropbox](https://www.dropbox.com/) or networked filesystems in general.** Do **NOT** start or store a repository in those systems. If you are storing projects there, it's best to move them out once you start using them with Git.
 
-First, create an empty folder on your computer. I'll call mine `~/git-practice`, but you can put yours wherever you want and call it whatever you want (again, with the exception that you shouldn't store it in Dropbox or similar systems). Go to this folder in your terminal, and once you're there, run
+First, create an empty folder on your computer. I'll call mine `~/git-practice`, but you can put yours wherever you want and call it whatever you want (again, with the exception that you shouldn't store it in Dropbox or similar systems). Go to this folder in your terminal, and once you're there, run:
 
 ```
 $ git init repo1
@@ -163,20 +163,20 @@ $ ls .git
 HEAD        branches    config      description hooks       info        objects     refs
 ```
 
-This `.git` directory is the place Git stores all of the data it needs to keep track of the state of this repository. Once you get started, you can delete everything else in the repository and Git will have everything it needs to bring it back exactly the way it was (again, there are some caveats to this, but we'll see them later). Conversely, if you delete the repository, all of the Git magic will go away. The directory will be just a normal directory, left in exactly the state it was in right before you deleted `.git`.
+This `.git` directory is the place Git stores all of the data it needs to keep track of the state of this repository. Once you get started, you can delete everything else in the repository and Git will have everything it needs to bring it back exactly the way it was (there are some caveats to this, but we'll see them later). Conversely, if you delete the repository, all of the Git magic will go away. The directory will be just a normal directory, left in exactly the state it was in right before you deleted `.git`.
 
 One very important thing to emphasize is that Git is **not** a magic tool that somehow runs in the background and keeps track of your files. It is really just a tool for manipulating data in one-off commands. In other words, the `.git` repository is **the only** place that Git keeps track of its state (with the one exception of the "`git config --global`" command, which just manipulates `~/.gitconfig`).
 
-This is a very important principle to understand, because it means that the best way to think about Git is like any other Unix command that manipulates files and directories (e.g. "`cat foo`" or "`find my-directory`" or "`echo "Hello there" > hello.txt`"). Git might be a particularly advanced one, but it doesn't have a concept of "starting up" or "shutting down." All of the state it needs is in this `.git` directory. More generally, Git isn't a program that "runs in the background" like, for example, Dropbox. It doesn't automatically sync anything for you. For example, if you have a repository on Dropbox, nothing you do with Git will modify that until you "push" to it (more on that below).
+This is a very important principle to understand, because it means that the best way to think about Git is like any other Unix command that manipulates files and directories (e.g. "`cat foo`" or "`find my-directory`" or "`echo "Hello there" > hello.txt`"). Git might be a particularly advanced one, but it doesn't have a concept of "starting up" or "shutting down." All of the state it needs is in this `.git` directory. More generally, Git isn't a program that "runs in the background" like, for example, Dropbox. It doesn't automatically sync anything for you. For example, if you have a repository on Github, nothing you do on your local computer with Git will modify that until you "push" to it (more on that below).
 
-You pretty much don't need to worry about the contents of this directory (and, given how important it is, it's best not to mess with it for the time being). The only exception is the file `.git/config`, which, as promised, contains the analogous "local configuration" to the global configuration in the `~/.gitconfig` file. If you look inside this file, you will likely see that it already has some configuration options, probably under the `[core]` section. To modify this file, run any of the `git config` commands we ran before, but this time without the `--global` option. They will end up in this file. If you share this repository with anyone, these local configurations will get shared with them, too.
+You pretty much don't need to worry about the contents of this directory (and, given how important it is, it's best not to mess with it for the time being). The only exception is the file `.git/config`, which, as promised, contains the analogous "local configuration" to the global configuration in the `~/.gitconfig` file. If you look inside this file, you will likely see that it already has some configuration options, probably under the `[core]` section. To modify this file, run any of the `git config` commands we ran before, but this time without the `--global` option. They will end up in this file.
 
 Again, remember that repositories are totally self-sufficient. If you went ahead and created a second repository, say, `~/git-practice/repo2` and ran `git config` (without the `--global`) in there, then `repo2` could have a different configuration from `repo1`. That might be quite useful (e.g. you might want to use different names for different projects). But this also applies to everything else other than configuration. The two repositories can have totally different files and histories from each other. They are totally separate projects.
 
 The last thing to say about repositories is that you should generally avoid nesting them. In other words, don't run `git init` inside of `repo1`. It technically works, but it will be very confusing, and unless you're very precise, Git will behave in unexpected ways. There is an advanced Git feature called a "submodule" that is roughly conceptually equivalent to one Git repository inside of another. We'll get to it near the end.
 
 
-## How Git thinks about the world
+## How Git thinks about repositories
 
 Before we go any further, it is going to be helpful to describe how Git actually thinks about your repository. Again, we won't go into any details as far as how Git works internally. The important thing is the concepts that it exposes.
 
@@ -319,7 +319,7 @@ At this point, Git will open up your text editor that you configured earlier. Th
 #       new file:   baz.txt                                                                                                                                                                                                               
 #       </span></code></pre>
 
-**(Note: if you didn't configure your editor and end up with a weird screen containing the above and a bunch of `~`, you are in an editor called `vim`. This editor is often the default editor on a bunch of Unix systems. It's extremely user-unfriendly. To exit it, you should type `:q!` [literally colon-q-exclamation mark]. Then, run the `git config` editor described above to set an editor and try again.)**
+**(Note: if you didn't configure your editor and end up with a weird screen containing the above and a bunch of `~`, and don't know what's going on, you are in an editor called `vim`. This editor is often the default editor on a bunch of Unix systems. It's extremely user-unfriendly. To exit it, you should type `:q!` [literally colon-q-exclamation mark]. Then, run the `git config` editor described above to set an editor and try again.)**
 
 You can write out your message as much as you want. It's customry to summarize the commit in the first line short (ideally using fewer than 80 characters and usually without a period) and then expand with one or more paragraphs. So something like this:
 
@@ -405,7 +405,7 @@ $ git commit -m "Added a line to foo.txt"
  1 file changed, 1 insertion(+)
 ```
 
-If you read carefully a few paragraphs above, you can also see that Git suggested running `git commit -a`. The `-a` means "add". In other words, `git commit -a` automatically adds all the changes it detects and commits them. You can do this, but it's a little cavalier so I don't recommend it. Also, note that it will only work for files Git already knows about. Back when we first started, `git commit -a` wouldn't have worked. Since Git didn't know about any of the files in our directory, it wouldn't have detected anything.
+If you read carefully a few paragraphs above, you can also see that Git suggested running `git commit -a`. The `-a` means "add". In other words, `git commit -a` automatically adds all the changes it detects and commits them. You can do this, but it's a little cavalier so I don't recommend it until you're more comfortable with Git. Also, note that it will only work for files Git already knows about. Back when we first started, `git commit -a` wouldn't have worked. Since Git didn't know about any of the files in our directory, it wouldn't have detected anything.
 
 ## Playing with commits
 
@@ -518,11 +518,11 @@ Date:   Sat May 23 20:19:52 2015 -0400
     [...]
 </code></pre>
 
-(Noting that `9b5d324c21ac130ad4b8dc740b1efef49af7daec` is the commit name of the last commit we made—see the `git log` output above). You can keep appending `^`s to keep going down the history. So for example, `9b5d324c21ac130ad4b8dc740b1efef49af7daec^^` refers to the first commit (i.e. two before the last one). If we had more commits to go, you can keep adding more `^`s.
+(Noting that `9b5d324c21ac130ad4b8dc740b1efef49af7daec` is the commit name of the last commit we made&mdash;see the `git log` output above). You can keep appending `^`s to keep going down the history. So for example, `9b5d324c21ac130ad4b8dc740b1efef49af7daec^^` refers to the first commit (i.e. two before the last one). If we had more commits to go, you can keep adding more `^`s.
 
 #### `HEAD`
 
-One of the other ways to refer to a commit is `HEAD`. This is a super special way, and it's very important. `HEAD` is a special name that always points to "the commit you're currently at". This doesn't make much sense right now because we haven't talked about **at** a particular commit, but it will make more sense in a moment. For now, we can say that `HEAD` always points to the latest commit. So if you run `git show HEAD`, you will get:
+One of the other ways to refer to a commit is `HEAD`. This is a super special way, and it's very important. `HEAD` is a special name that always points to "the commit you're currently at". This doesn't make much sense right now because we haven't talked about being **at** a particular commit, but it will make more sense in a moment. For now, we can say that `HEAD` always points to the latest commit. So if you run `git show HEAD`, you will get:
 
 <pre><code>$ git show HEAD
 <span class="sha1">commit 9b5d324c21ac130ad4b8dc740b1efef49af7daec</span>
@@ -578,7 +578,7 @@ index 257cc56..186b214 100644
 <span class="addition">+A second line</span>
 </span></code></pre>
 
-Additionally, many commands we've talked about actually secretly expect a commit name, and use `HEAD` if you don't provide one. For example, `git log` actually shows the file at a particular commit, and just defaults to `HEAD` if you don't provide one. If you give it a commit, it will start at that commit. Try it!
+Additionally, many commands we've talked about actually secretly expect a commit name, and use `HEAD` if you don't provide one. For example, `git log` actually shows the history starting at a particular commit, and just defaults to `HEAD` if you don't provide one. If you give it a commit, it will start at that commit. Try it!
 
 Even `git diff` operates as if we provided a commit name, using `HEAD` if we didn't provide one. So if you change a file and run `git diff` (which is the same as running `git diff HEAD`) it will show you everything that changed since the previous commit. But if you run `git diff` with a particular commit, it will show you everything that changed since **that** commit. So for example, if we don't change any files and run `git diff HEAD^`, we will see everything that changed since the second-to-last commit, which is almost equivalent to running `git show HEAD`:
 
@@ -612,7 +612,7 @@ As you can see, the only difference is that the `git show HEAD` version also sho
 
 ## Undoing changes
 
-As I said before, Git makes it very hard to lose data once it learns about it. In this section, we're going to look at some of the ways Git lets us make changes—and also to undo them.
+As I said before, Git makes it very hard to lose data once it learns about it. In this section, we're going to look at some of the ways Git lets us make changes&mdash;and also to undo them.
 
 We've already seen a way to do this in the simplest case: discarding a change that was made and not committed. Recall that after we made a change to `foo.txt`, we were able to get rid of it like it never happened. Let's try something like that again.
 
@@ -671,11 +671,11 @@ On branch old-master
 nothing to commit, working directory clean
 ```
 
-This command is a little more straightforward than `git checkout --`. It brings the state of Git exactly back to the state at a particular commit. All data (that Git knows about) that were changed in that time are brought back exactly to the state they were in at that commit. This is why we didn't have to specify that it was `foo.txt`—it doesn't undo individual files, it undoes **everything**.
+This command is a little more straightforward than `git checkout --`. It brings the state of Git exactly back to the state at a particular commit. All data (that Git knows about) that were changed in that time are brought back exactly to the state they were in at that commit. This is why we didn't have to specify that it was `foo.txt`: it doesn't undo individual files, it undoes **everything**.
 
 In some ways, the fact that this can be used to undo uncommitted changes to a file is also almost an accident. This command takes a commit to reset back to, and since we didn't provide one, it used `HEAD` as a default. So in effect, running `git reset --hard HEAD` says "bring the state of the repository back to the latest commit." In other words, totally undo all the changes made since then.
 
-You might be wondering, "what would happen if we did, for example, `git reset --hard HEAD^`?" Would it actually delete the most recent commit and bring us back to the one before that? The answer is yes—sort of. The repository would indeed be made to look exactly like the previous commit and if you ran `git log`, the commit that `HEAD` used to point to would not appear. It would look as if that commit was lost forever.
+You might be wondering, "what would happen if we did, for example, `git reset --hard HEAD^`?" Would it actually delete the most recent commit and bring us back to the one before that? The answer is yes&mdash;sort of. The repository would indeed be made to look exactly like the previous commit and if you ran `git log`, the commit that `HEAD` used to point to would not appear. It would look as if that commit was lost forever.
 
 In actuality, it wouldn't be. That's because Git actually keeps around objects for a while, even if nothing is pointing to them. Every so often, it runs a process called "garbage collection" in which those commits get deleted. But that doesn't happen for a while, and until then the commit would be available. Let's try it!
 
@@ -757,7 +757,7 @@ A branch in Git is actually an extremely simple concept. It really is just what 
 
 Thus, everything we've talked about so far applies. Two branches can have a lot in common or very little. They're just histories of commits pointing back (ultimately to some common ancestor), so they can contain commits that totally delete files, change them, add lines, whatever. 
 
-The only additional thing that a branch has is the branch _name_, which is technically a _reference_ to a commit. Think of it as a label that points to a particular commit—in particular, the last commit on that branch. So you can think of the name as that branch's personal `HEAD`.
+The only additional thing that a branch has is the branch _name_, which is technically a _reference_ to a commit. Think of it as a label that points to a particular commit&mdash;in particular, the last commit on that branch. So you can think of the name as that branch's personal `HEAD`.
 
 From Git's internal point of view, that "reference" is actually all that matters as far as keeping track of the branch. When you create a branch, you give it a name and a commit to point to, which creates the history as far as that branch is concerned. You don't actually need a branching situation like in the diagram above, where each branch contains commits that the other doesn't have.
 
@@ -1040,7 +1040,7 @@ But imagine if we weren't so lucky. Imagine, for example, that while Alice was m
 
 ### Merging
 
-One way to do it is via something called a "merge commit." A _merge commit_ is a very special commit that has **two** predecessors instead of one—one from each branch that is being merged together.
+One way to do it is via something called a "merge commit." A _merge commit_ is a very special commit that has **two** predecessors instead of one&mdash;one from each branch that is being merged together.
 
 Unfortunately, merging can be a difficult process. Whereas in a fast-forward commit, one branch contains a superset of the information of another, in the case of two divergent branches, their information has to somehow be brought together into one state. Git tries as hard as possible to do this automatically, but it can't always figure out what to do automatically. Let's take a look.
 
@@ -1066,10 +1066,11 @@ Changes to be committed:
 	<span class="staged">modified:   baz.txt</span>
 
 Unmerged paths:
-  (use "git add <file>..." to mark resolution)
+  (use "git add &lt;file&gt;..." to mark resolution)
 
-	<span class="unstaged">both modified:   foo.txt</span></code></pre>
-	
+	<span class="unstaged">both modified:   foo.txt
+</span></code></pre>
+
 It looks like Git was able to automatically merge `baz.txt` but not `foo.txt`. That makes sense. The change in `baz.txt` that was in `another-branch` was just an extra line that wasn't in `master`. So to merge it, we can just include the line. But with `foo.txt`, the situation is more complicated. There were two lines in `master` that weren't in `another-branch` and one line in `another-branch` that wasn't in master. This situation is known as a _merge conflict_.
 
 Here's what happened to the file after the `git merge`:
@@ -1131,6 +1132,8 @@ This is what our branch history looks like now:
 ....IMAGE....
 
 ### Rebasing
+
+When you want to merge two commits, 
 
 ### Conflicts
 
